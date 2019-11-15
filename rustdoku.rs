@@ -61,6 +61,24 @@ fn is_legal(sudoku: &Sudoku, pos: i32, num: i32) -> bool {
   return true;
 }
 
+fn is_legal_board(sudoku: &mut Sudoku) -> bool {
+  for i in 0..81 {
+    if sudoku.board[i] == 0 { continue; }
+
+    let t = sudoku.board[i]; // hack to save lines
+    sudoku.board[i] = 0;
+
+    if ! is_legal(&sudoku, i as i32, t) {
+      sudoku.board[i] = t;
+      return false;
+    }
+
+    sudoku.board[i] = t;
+  }
+
+  return true;
+}
+
 // Just brute force it through...
 fn fill_sudoku(sudoku: &mut Sudoku, pos: usize) -> bool {
   if pos >= 81 { return true; }
@@ -79,10 +97,8 @@ fn fill_sudoku(sudoku: &mut Sudoku, pos: usize) -> bool {
   return false;
 }
 
-pub fn solve_sudoku(filename : &str) {
+fn read_sudoku(filename: &str, sudoku: &mut Sudoku) {
   let contents = fs::read_to_string(filename).expect("Error reading the file!");
-
-  let mut sudoku: Sudoku = Sudoku { width: 9, height: 9, board: vec![] };
 
   for c in contents.chars() {
     if c == '\n' || c == ' ' {
@@ -96,6 +112,29 @@ pub fn solve_sudoku(filename : &str) {
   }
 
   assert!(sudoku.board.len() == 81, "Illegal board");
+}
+
+pub fn bench() {
+  let mut sudoku: Sudoku = Sudoku { width: 9, height: 9, board: vec![] };
+
+  for _i in 0..81 { sudoku.board.push(0); }
+
+  println!("> Benching ...");
+  if fill_sudoku(&mut sudoku, 0) {
+    println!("> Done!");
+    let start = Instant::now();
+    print_board(sudoku);
+    let duration = start.elapsed();
+    println!("> Time elapsed: {:?}", duration);
+  }
+}
+
+pub fn solve_sudoku(filename: &str) {
+  let mut sudoku: Sudoku = Sudoku { width: 9, height: 9, board: vec![] };
+
+  read_sudoku(filename, &mut sudoku);
+
+  assert!(is_legal_board(&mut sudoku), "Illegal board");
 
   println!("> Solving sudoku ...");
   if fill_sudoku(&mut sudoku, 0) {

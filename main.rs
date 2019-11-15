@@ -20,10 +20,13 @@ use std::env;
 
 mod rustdoku;
 
-static NAME: &str = "rustdoku 1.0 by Toni Helminen";
+static NAME: &str = "rustdoku 1.1 by Toni Helminen";
 
 fn print_help() {
-  println!("[ # Hlp\n]\n");
+  println!("[ # Hlp");
+  println!("  Usage: rustdoku [OPTION]... [FILE]...");
+  println!("  Solve 9x9 sudokus");
+  println!("]\n");
 
   println!("[ # Cmds");
   println!("  -h(elp)        This help");
@@ -34,7 +37,7 @@ fn print_help() {
   println!("]\n");
 
   println!("[ # Src code, please see:");
-  println!("  <https://github.com/SamuraiDangyo/rustdoku>");
+  println!("  <https://github.com/SamuraiDangyo/rustdoku/>");
   println!("]");
 }
 
@@ -60,16 +63,13 @@ fn commands() {
   if args.len() >= 2 {
     if cmd == "-h" || cmd == "-help" {
       print_help();
-      return;
     } else if cmd == "-v" || cmd == "-version" {
       println!("{}", NAME);
-      return;
     } else if cmd == "-bench" {
-      println!("> Solving the hardest sudoku ...");
-      rustdoku::solve_sudoku("hardest_sudoku.txt");
-      return;
+      rustdoku::bench();
+    } else {
+      assert!(false, "Illegal arguments");
     }
-    assert!(false, "Illegal arguments");
   }
 }
 

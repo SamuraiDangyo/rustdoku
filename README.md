@@ -1,10 +1,10 @@
 ## rustdoku
-rustdoku, a 9x9 sudoku solver
+a 9x9 sudoku solver
 
 ### What ?!?
-Something simple just learning Rust.
+Something simple, just learning Rust.
 
-### How to use ?!?
+### How to use it ?!?
 - ```make install```
-- ```rustdoku -f empty.txt # Fill empty.txt w/ your sudoku```
-- ```rustdoku -h # Show help```
+- ```rustdoku -f empty.txt``` # Fill empty.txt w/ your sudoku
+- ```rustdoku -h``` # Show help
